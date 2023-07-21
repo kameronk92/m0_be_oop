@@ -47,99 +47,98 @@ p vamp1.name
 p vamp1.pet
 p vamp1.thirsty
 
-#  Write a Dragon class
-#  it should have a dynamic name attribute (string)
-#  it should have a dynamic rider attribute (string)
-#  it should have a dynamic color attribute (string)
-#  it should have a is_hungry attribute that is true by default
-#  it should have a eat method. If the dragon eats 4 times, it is no longer hungry
-
 class Dragon
-    attr_reader :name, :rider, :color, :hungry
-    def initialize(name, rider, color, is_hungry = true)
-        @name = name
-        @rider = rider
-        @color = color
-        @is_hungry = is_hungry
+    attr_reader :name, :rider, :color, :is_hungry, :counter
+    
+    def initialize(name, rider, color)
+      # it should have a dynamic name attribute(string)
+      @name      = name
+      # it should have a dynamic rider attribute(string)
+      @rider     = rider
+      # it should have a dynamic color attribute(string)
+      @color     = color
+      # it should have a is_hungry attribute that is true by default
+      @is_hungry = true
+      @counter   = 0
     end
-    def eat()
-        count = 0
-        name = :eat
-
-        TracePoint.trace(:call) do |t|
-            count += 1 if t.method_id == name
-        
-        if count >= 4
-            @is_hungry = false
-        end
+    # it should have a eat method.If the dragon eats 4 times, it is no longer hungry
+    def eat
+      @counter += 1
+      @is_hungry = false if @counter >= 4
     end
-    end
-    end
-dragon1 = Dragon.new("jake", "fin", "silver")
+  end
+  
+  puts 'Dragon Class Tests'
+  puts '========================'
+  
+  puff = Dragon.new('Puff', 'Jeff', 'orange')
+  puts puff.name == 'Puff'
+  puts puff.rider == 'Jeff'
+  puts puff.color == 'orange'
+  puts puff.name == 'Jeff'
+  
+  puff.eat                      
+  puts puff.is_hungry == true # true
+  3.times { puff.eat }
+  puts puff.is_hungry == false # true
+  puff.eat
+  puts puff.is_hungry == false # true
 
-dragon1.eat()
-dragon1.eat()
-dragon1.eat()
-
-p dragon1
-
-#  Write a Hobbit class
-#  it should have a dynamic name attribute (string)
-#  it should have a dynamic disposition attribute (string)
-#  it should have an age attribute that defaults to 0
-#  it should have a celebrate_birthday method. When called, the age increases by 1
-#  it should have an is_adult attribute (boolean) that is false by default. once a Hobbit is 33, it should be an adult
-#  it should have an is_old attribute that defaults to false. once a Hobbit is 101, it is old.
-#  it should have a has_ring attribute. If the Hobbit's name is "Frodo", true, if not, false.
-
+# Write a Hobbit class
 class Hobbit
-    attr_reader :name, :disposition, :age, :is_adult, :is_old, :has_ring
+    attr_reader :name, :disposition, :age
+  
     def initialize(name, disposition, age = 0)
-        @name = name
-        @disposition = disposition
-        @age = age
-        @is_adult = false
-        if age >= 33
-            @is_adult = true
-        end
-        @is_old = false
-        if age >= 101
-            @is_old = true
-        end
-        @has_ring = false
-        if name == "Frodo"
-            @has_ring = true
-        end
+      # it should have a dynamic name attribute(string)
+      @name        = name
+      # it should have a dynamic disposition attribute(string)
+      @disposition = disposition
+      # it should have an age attribute that defaults to 0
+      @age         = age
     end
-
+    # it should have an is_adult attribute(boolean) that is false by default. once a Hobbit is 33, it should be an adult
+    def is_adult
+      @age >= 33
+    end
+    # it should have an is_old attribute that defaults to false. Once a Hobbit is 101, it is old.
+    def is_old
+      @age >= 101
+    end
+    # it should have a celebrate_birthday method. When called, the age increases by 1
     def celebrate_birthday
-        @age = age + 1
-        if age > 32
-            @is_adult = true
-        end
-        if age > 100
-            @is_old = true
-        end
+      @age += 1
     end
+    # it should have a has_ring attribute.If the Hobbit's name is "Frodo", true, if not, false.
+    def has_ring
+      @name == 'Frodo'
     end
-
-saam = Hobbit.new("Saam", "loyal", 31)
-saam.celebrate_birthday
-p saam
-saam.celebrate_birthday
-p saam
-saam.celebrate_birthday
-p saam
-saam.celebrate_birthday
-p saam
-saam.celebrate_birthday
-p saam
-saam.celebrate_birthday
-p saam
-
-frodo = Hobbit.new("Frodo", "persistent", 28)
-p frodo
-
-bilbo = Hobbit.new("Bilbo", "super old", 300)
-p bilbo
-
+  end
+  
+  puts 'Hobbit Class Tests'
+  puts '========================'
+  
+  frodo = Hobbit.new("Frodo", "fearless")
+  
+  puts frodo.name
+  puts frodo.disposition
+  puts frodo.age
+  puts frodo.is_adult
+  puts frodo.is_old
+  puts frodo.has_ring
+  
+  frodo.celebrate_birthday
+  puts frodo.age
+  puts frodo.is_adult
+  puts frodo.is_old
+  
+  31.times { frodo.celebrate_birthday }
+  puts frodo.age
+  puts frodo.is_adult
+  puts frodo.is_old
+  
+  111.times { frodo.celebrate_birthday }
+  puts frodo.age
+  puts frodo.is_adult
+  puts frodo.is_old
+  
+  puts Hobbit.new("Samwise", "Brave").has_ring
